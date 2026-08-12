@@ -1,0 +1,23 @@
+# Variáveis de ambiente (contém senha do banco — NUNCA subir)
+.env
+
+# Planilhas com dados reais da empresa
+*.xlsx
+*.xls
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
