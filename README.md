@@ -1,81 +1,64 @@
-# 💰 CashFlow Dashboard
+# CashFlow Dashboard
 
-Dashboard financeiro completo desenvolvido com **Python + Flask + MySQL + HTML/CSS/JS**.
+Sistema web de controle de fluxo de caixa desenvolvido para centralizar e automatizar a gestão financeira empresarial, substituindo planilhas Excel por uma interface visual interativa e um banco de dados relacional.
 
-## Funcionalidades
+## Sobre o sistema
 
-- 📊 **Visão geral** — KPIs, saldo projetado e gráficos
-- 📅 **Fluxo diário** — entradas, saídas e saldo por data
-- 💳 **Pagamentos** — registro e controle diário com exportação CSV
-- 🏦 **KGIRO** — contratos de capital de giro e parcelas
-- 📄 **Duplicatas** — títulos a pagar com filtros
-- 💰 **Recebíveis** — títulos a receber com marcação de recebimento
-- 📈 **Endividamento** — saldo devedor por banco
-- ⚙️ **Configurações** — bancos, categorias, KGIRO e senha
+O CashFlow Dashboard consolida em uma única aplicação o controle de saldos bancários, projeção de caixa, registro de pagamentos, gestão de títulos a pagar e a receber, contratos de capital de giro e endividamento por banco. Os dados são inseridos via importação de planilha Excel ou diretamente pela interface, e persistidos em banco MySQL com atualização em tempo real via API REST.
 
-## Tecnologias
+A aplicação possui autenticação por senha com sessão de 30 minutos, exportação de dados em CSV e uma seção de configurações que permite gerenciar bancos, categorias de saída e contratos sem necessidade de acesso ao banco de dados.
+
+## Stack
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Backend | Python 3 + Flask |
-| Banco de dados | MySQL |
-| Frontend | HTML + CSS + JavaScript + Chart.js |
-| Importação | openpyxl (Excel → MySQL) |
+| Backend | Python 3 · Flask · Flask-CORS |
+| Banco de dados | MySQL · mysql-connector-python |
+| Frontend | HTML5 · CSS3 · JavaScript · Chart.js |
+| Importação | openpyxl |
+| Autenticação futura | Microsoft Graph API (Outlook) |
 
-## Como instalar
-
-### 1. Clonar o repositório
-```bash
-git clone https://github.com/seu-usuario/CashFlow-Dashboard.git
-cd CashFlow-Dashboard
-```
-
-### 2. Instalar dependências
-```bash
-pip install -r backend/requirements.txt
-```
-
-### 3. Configurar banco de dados
-```bash
-# Criar banco
-mysql -u root -p < database/schema.sql
-
-# Copiar e preencher variáveis de ambiente
-cp .env.example .env
-# Edite o .env com suas credenciais
-```
-
-### 4. Importar planilha (opcional)
-```bash
-python scripts/importar_planilha.py caminho/para/planilha.xlsx
-```
-
-### 5. Iniciar servidor
-```bash
-python backend/app.py
-```
-
-Acesse `http://localhost:5000/api/health` para verificar se está funcionando.
-
-### 6. Abrir o dashboard
-No VS Code, clique com o botão direito em `frontend/index.html` e escolha **Open with Live Server**.
-
-## Estrutura do projeto
+## Arquitetura
 
 ```
 CashFlow-Dashboard/
 ├── backend/
-│   ├── app.py              ← API Flask com todas as rotas
-│   └── requirements.txt
+│   └── app.py              ← API REST (Flask) com 25+ endpoints
 ├── database/
-│   └── schema.sql          ← Criação das tabelas MySQL
+│   └── schema.sql          ← 11 tabelas relacionais MySQL
 ├── frontend/
-│   └── index.html          ← Dashboard completo (single page)
+│   └── index.html          ← SPA com roteamento client-side
 ├── scripts/
-│   └── importar_planilha.py ← Importação de Excel para MySQL
-├── .env.example            ← Modelo de configuração
-├── .gitignore
-└── README.md
+│   └── importar_planilha.py ← ETL: Excel → MySQL via openpyxl
+└── .env.example
+```
+
+## Módulos
+
+**Visão geral** — KPIs em tempo real: saldo consolidado em bancos, total a receber, pagamentos do dia e saldo projetado para os próximos 30 dias. Gráficos de linha (projeção de caixa), rosca (saídas por categoria) e barras horizontais (saldo por banco).
+
+**Fluxo diário** — Projeção de entradas e saídas por data com visualização em gráfico de barras agrupadas e tabela detalhada. Filtros por período de 7 a 90 dias.
+
+**Pagamentos** — CRUD completo de pagamentos diários com campos de descrição, favorecido, banco, valor, desconto e observação. Cálculo automático do valor líquido, filtros por status (pendente/pago/cancelado) e exportação em CSV.
+
+**KGIRO** — Gestão de contratos de capital de giro: cadastro de contratos com parcelas, taxa e garantia; alertas de vencimento em 30 dias; confirmação de pagamento de parcelas individuais.
+
+**Duplicatas e Recebíveis** — Listagem paginada de títulos com filtros por banco e período. Recebíveis com marcação de recebimento e reversão de status.
+
+**Endividamento** — Saldo devedor consolidado por banco com visualização em gráfico e data de referência.
+
+**Configurações** — Gerenciamento de bancos (com saldo e conta), categorias de saída e contratos de KGIRO. Troca de senha de acesso.
+
+## Variáveis de ambiente
+
+```env
+DB_HOST=
+DB_PORT=3306
+DB_USER=
+DB_PASSWORD=
+DB_NAME=cashflow_db
+PORT=5000
+SECRET_KEY=
 ```
 
 ## Licença
